@@ -1,7 +1,3 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 public class HeapMain {
     private static int[][] rawData;
 
@@ -15,10 +11,24 @@ public class HeapMain {
         Heap<Integer> heap = new Heap<>();
 
         // 1. heap 에 data 추가
-//        for (int i = 0; i < testData.; i++) {
-//            for (int j = 0; j < ; j++) {
-//
+        for (int[] i : testData) {
+            for (int j : i) {
+                heap.add(j);
+            }
+
+            // 2. heap 내부상태 출력
+            System.out.print("heap 내부 상태 : ");
+            for (Object val : heap.toArray()) {
+                System.out.print(val + " ");
+            }
+            System.out.println();
+
+            // 3. heap 에서 한개씩 요소 제거
+            System.out.print("heap 요소 뽑기 : ");
+//            while (!heap.isEmpty()) {
+//                System.out.print(heap.remove() + " ");
 //            }
-//        }
+        }
     }
 }
+

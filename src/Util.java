@@ -3,7 +3,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public final class Util {
-    private static final String SAMPLE_FILE_PATH = "res/test_sample.txt";
+    public static final String SAMPLE_FILE_PATH = "res/test_sample.txt";
 
     public static void makeTestDataToSampleFile(int height, int width) {
         Random random = new Random();
