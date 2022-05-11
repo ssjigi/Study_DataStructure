@@ -91,10 +91,110 @@ public class Heap<E> {
     }
 
     public E remove() {
-        return null;
+        E result = peek();
+        E target = (E) arr[size];
+        arr[size] = null;
+
+        siftDown(1, target);
+
+        return result;
     }
 
-    private void siftDown(int index, E target) {
+    private void siftDown(int idx, E target) {
+        if(comparator != null) {
+            siftDownComparator(idx, target, comparator);
+        }
+        else {
+            siftDownComparable(idx, target);
+        }
+    }
+
+    private void siftDownComparator(int idx, E target, Comparator<? super E> comp) {
+
+        arr[idx] = null;	// 삭제 할 인덱스의 노드를 삭제
+        size--;
+
+        int parent = idx;	// 삭제노드부터 시작 할 부모를 가리키는 변수
+        int child;	// 교환 될 자식을 가리키는 변수
+
+        // 왼쪽 자식 노드의 인덱스가 요소의 개수보다 작을 때 까지 반복
+        while((child = getLeftChild(parent)) <= size) {
+
+            int right = getRightChild(parent);	// 오른쪽 자식 인덱스
+
+            Object childVal = arr[child];	// 왼쪽 자식의 값 (교환 될 값)
+
+            /*
+             *  오른쪽 자식 인덱스가 size를 넘지 않으면서
+             *  왼쪽 자식이 오른쪽 자식보다 큰 경우
+             *  재배치 할 노드는 작은 자식과 비교해야하므로 child와 childVal을
+             *  오른쪽 자식으로 바꿔준다.
+             */
+            if(right <= size && comp.compare((E) childVal, (E) arr[right]) > 0) {
+                child = right;
+                childVal = arr[child];
+            }
+
+            // 재배치 할 노드가 자식 노드보다 작을경우 반복문을 종료한다.
+            if(comp.compare(target ,(E) childVal) <= 0){
+                break;
+            }
+
+            /*
+             *  현재 부모 인덱스에 자식 노드 값을 대체해주고
+             *  부모 인덱스를 자식 인덱스로 교체
+             */
+            arr[parent] = childVal;
+            parent = child;
+        }
+
+        // 최종적으로 재배치 되는 위치에 타겟이 된 값을 넣어준다.
+        arr[parent] = target;
+
+        /*
+         *  용적의 사이즈가 최소 용적보다는 크면서 요소의 개수가 전체 용적의 1/4일경우
+         *  용적을 반으로 줄임(단, 최소용적보단 커야함)
+         */
+        if(arr.length > DEFAULT_CAPACITY && size < arr.length / 4) {
+            resize(Math.max(DEFAULT_CAPACITY, arr.length / 2));
+        }
+
+    }
+
+    // Comparable을 이용한 sift-down
+    private void siftDownComparable(int idx, E target) {
+
+        Comparable<? super E> comp = (Comparable<? super E>) target;
+
+        arr[idx] = null;
+        size--;
+
+        int parent = idx;
+        int child;
+
+        while((child = getLeftChild(parent)) <= size) {
+
+            int right = getRightChild(parent);
+
+            Object childVal = arr[child];
+
+            if(right <= size && ((Comparable<? super E>)childVal).compareTo((E)arr[right]) > 0) {
+                child = right;
+                childVal = arr[child];
+            }
+
+            if(comp.compareTo((E) childVal) <= 0){
+                break;
+            }
+            arr[parent] = childVal;
+            parent = child;
+
+        }
+        arr[parent] = comp;
+
+        if(arr.length > DEFAULT_CAPACITY && size < arr.length / 4) {
+            resize(Math.max(DEFAULT_CAPACITY, arr.length / 2));
+        }
 
     }
 

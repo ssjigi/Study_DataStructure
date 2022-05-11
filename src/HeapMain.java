@@ -25,9 +25,10 @@ public class HeapMain {
 
             // 3. heap 에서 한개씩 요소 제거
             System.out.print("heap 요소 뽑기 : ");
-//            while (!heap.isEmpty()) {
-//                System.out.print(heap.remove() + " ");
-//            }
+            while (!heap.isEmpty()) {
+                System.out.print(heap.remove() + " ");
+            }
+            System.out.println();
         }
     }
 }
